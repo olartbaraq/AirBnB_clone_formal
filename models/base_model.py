@@ -2,8 +2,8 @@
 """ imports python modules"""
 import json
 import uuid
-import time
 from datetime import datetime
+import models
 
 """Defines a class BaseModel that defines all
    common attributes/method for other classes
@@ -24,6 +24,8 @@ class BaseModel():
                     continue
                 setattr(self, key, value)
         # setattr() function sets the value of the attribute of an object
+        if "id" not in kwargs:
+            models.storage.new(self)
 
     def __str__(self):
         """prints the class attributes as a string"""
@@ -33,6 +35,7 @@ class BaseModel():
     def save(self):
         """updates the attribute updated_at with current datetime"""
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """returns a dictionary containing all
